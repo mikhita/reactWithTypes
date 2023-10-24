@@ -3,64 +3,43 @@ import Header from "./components/Header";
 import Total from "./components/Total";
 
 const App = () => {
-  interface CoursePartWithDescription extends CoursePartBase {
-    description: string;
-  }
-  interface CoursePartBase {
-    name: string;
-    exerciseCount: number;
-  }
-  
-  interface CoursePartBasic extends CoursePartWithDescription {
-    kind: "basic"
-  }
-  
-  interface CoursePartGroup extends CoursePartBase {
-    groupProjectCount: number;
-    kind: "group"
-  }
-  
-  interface CoursePartBackground extends CoursePartWithDescription {
-    backgroundMaterial: string;
-    kind: "background"
-  }
-  
-  type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground;
-  
-  const courseParts: CoursePart[] = [
+
+  const courseName = "Half Stack application development";
+
+  const courseParts = [
     {
       name: "Fundamentals",
       exerciseCount: 10,
       description: "This is an awesome course part",
-      kind: "basic"
+      kind: "basic" as const,
     },
     {
       name: "Using props to pass data",
       exerciseCount: 7,
       groupProjectCount: 3,
-      kind: "group"
+      kind: "group" as const,
     },
     {
       name: "Basics of type Narrowing",
       exerciseCount: 7,
       description: "How to go from unknown to string",
-      kind: "basic"
+      kind: "basic" as const,
     },
     {
       name: "Deeper type usage",
       exerciseCount: 14,
       description: "Confusing description",
       backgroundMaterial: "https://type-level-typescript.com/template-literal-types",
-      kind: "background"
+      kind: "background" as const,
     },
     {
-      name: "TypeScript in frontend",
-      exerciseCount: 10,
-      description: "a hard part",
-      kind: "basic",
-    },
+      name: "Backend development",
+      exerciseCount: 21,
+      description: "Typing the backend",
+      requirements: ["nodejs", "jest"],
+      kind: "special" as const,
+    }
   ];
-  const courseName = "Half Stack application development";
 
   const totalExercises = courseParts.reduce((sum, part) => sum + part.exerciseCount, 0);
 
