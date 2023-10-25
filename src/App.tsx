@@ -1,53 +1,27 @@
-import Content from "./components/Content";
-import Header from "./components/Header";
-import Total from "./components/Total";
+import { useState, useEffect } from 'react';
+import { DiaryEntry } from './types';
+import { getAllDiaries } from './DiaryServices';
 
 const App = () => {
 
-  const courseName = "Half Stack application development";
-
-  const courseParts = [
-    {
-      name: "Fundamentals",
-      exerciseCount: 10,
-      description: "This is an awesome course part",
-      kind: "basic" as const,
-    },
-    {
-      name: "Using props to pass data",
-      exerciseCount: 7,
-      groupProjectCount: 3,
-      kind: "group" as const,
-    },
-    {
-      name: "Basics of type Narrowing",
-      exerciseCount: 7,
-      description: "How to go from unknown to string",
-      kind: "basic" as const,
-    },
-    {
-      name: "Deeper type usage",
-      exerciseCount: 14,
-      description: "Confusing description",
-      backgroundMaterial: "https://type-level-typescript.com/template-literal-types",
-      kind: "background" as const,
-    },
-    {
-      name: "Backend development",
-      exerciseCount: 21,
-      description: "Typing the backend",
-      requirements: ["nodejs", "jest"],
-      kind: "special" as const,
-    }
-  ];
-
-  const totalExercises = courseParts.reduce((sum, part) => sum + part.exerciseCount, 0);
+  const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
+  useEffect(() => {
+    getAllDiaries().then(data => {
+      setDiaries(data)
+    })
+  }, [])
 
   return (
     <div>
-      <Header courseName={courseName} />
-      <Content contentParts={courseParts}/>
-      <Total totalExercises={totalExercises}/>
+      <h1>Diaries from backend</h1>
+        {diaries.map(diary =>
+          <ul key={diary.id}>
+            <li>{diary.date}</li>
+            <li>{diary.visibility}</li>
+            <li>{diary.weather}</li>
+            <li>{diary.comment}</li>
+          </ul>
+        )}
     </div>
   
   );
