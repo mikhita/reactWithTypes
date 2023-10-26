@@ -75,7 +75,7 @@ const App = () => {
         <div>
           <label>Date:</label>
           <input
-            type="text"
+            type="date"
             value={newDiary.date}
             onChange={(event) => setNewDiary({ ...newDiary, date: event.target.value })}
           />
