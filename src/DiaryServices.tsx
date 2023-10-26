@@ -9,14 +9,18 @@ export const getAllDiaries = () => {
     .then(response => response.data)
 }
 
-export const createDiary = (object: NewDiary) => {
+export const createDiary = (object: NewDiary, setError: (error: string | null) => void) => {
   console.log(object);
 
   return axios
     .post<DiaryEntry>(baseUrl, object)
     .then(response => response.data)
     .catch(error => {
-      if (error.response) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.status)
+        console.error(error.response);
+        setError(`${error.response?.data}`); 
+      } else if (error.response) {
         // The request was made, but the server responded with an error response.
         // You can access response data and status here.
         console.error("Server responded with an error:", error.response.status, error.response.data);

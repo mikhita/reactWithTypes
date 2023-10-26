@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { DiaryEntry, NewDiary, Visibility, Weather } from './types';
 import { createDiary, getAllDiaries } from './DiaryServices';
+import Alert from 'react-bootstrap/Alert';
 
 const App = () => {
   const [newDiary, setNewDiary] = useState<NewDiary>({
@@ -15,15 +16,20 @@ const App = () => {
       setDiaries(data)
     })
   }, [])
+  const [error, setError] = useState<string | null>(null);
   const diaryCreation = (event: React.FormEvent) => {
     event.preventDefault();
     console.log(newDiary)
-    createDiary(newDiary)
+    createDiary(newDiary, setError)
       .then(data => {
         setDiaries(diaries.concat(data));
+        setError(null);
       })
       .catch(error => {
         console.error("Error creating diary:", error);
+        setTimeout(() => {
+          setError(null); 
+        }, 3000);
       });
     setNewDiary({
       weather: Weather.Sunny,
@@ -36,6 +42,9 @@ const App = () => {
   return (
     <div>
       <h1>Diaries from backend</h1>
+      <Alert variant="danger" style={{ color: 'red' }}>
+      {error && <p className="error-message">{error}</p>}
+      </Alert>
       <form onSubmit={diaryCreation}>
         <div>
           <label>Weather:</label>
